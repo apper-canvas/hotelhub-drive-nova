@@ -11,6 +11,7 @@ import Reports from "@/components/pages/Reports"
 import Analytics from "@/components/pages/Analytics"
 import Billing from "@/components/pages/Billing"
 import GuestBooking from "@/components/pages/GuestBooking"
+import Profile from "@/components/pages/Profile"
 
 function App() {
   return (
@@ -23,10 +24,11 @@ function App() {
             <Route path="rooms" element={<Rooms />} />
             <Route path="guests" element={<Guests />} />
             <Route path="bookings" element={<Bookings />} />
-            <Route path="staff" element={<Staff />} />
+<Route path="staff" element={<Staff />} />
             <Route path="reports" element={<Reports />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="billing" element={<Billing />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Routes>
         <ToastContainer

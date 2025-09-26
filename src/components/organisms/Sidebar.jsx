@@ -6,13 +6,14 @@ import { cn } from "@/utils/cn"
 const Sidebar = ({ className = "" }) => {
   const location = useLocation()
 
-  const menuItems = [
+const menuItems = [
     { to: "/", icon: "LayoutDashboard", label: "Dashboard" },
     { to: "/rooms", icon: "Home", label: "Rooms" },
     { to: "/guests", icon: "Users", label: "Guests" },
     { to: "/bookings", icon: "Calendar", label: "Bookings" },
     { to: "/staff", icon: "UserCheck", label: "Staff" },
-    { to: "/reports", icon: "BarChart3", label: "Reports" }
+    { to: "/reports", icon: "BarChart3", label: "Reports" },
+    { to: "/profile", icon: "User", label: "Profile" }
   ]
 
   return (
