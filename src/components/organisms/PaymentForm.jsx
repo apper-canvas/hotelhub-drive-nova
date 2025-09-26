@@ -1,9 +1,11 @@
-import React, { useState } from "react"
-import { toast } from "react-toastify"
-import Card from "@/components/atoms/Card"
-import Button from "@/components/atoms/Button"
-import FormField from "@/components/molecules/FormField"
-import ApperIcon from "@/components/ApperIcon"
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import FormField from "@/components/molecules/FormField";
+import Error from "@/components/ui/Error";
+import Button from "@/components/atoms/Button";
+import Card from "@/components/atoms/Card";
+import Billing from "@/components/pages/Billing";
 
 const { ApperClient } = window.ApperSDK
 
@@ -12,7 +14,7 @@ const apperClient = new ApperClient({
   apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
 })
 
-const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) => {
+const PaymentForm = ({ bookingData, onPaymentComplete, onBack }) => {
   const [paymentForm, setPaymentForm] = useState({
     cardNumber: "",
     expiryDate: "",
@@ -121,11 +123,10 @@ const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) 
 
     setIsProcessing(true)
 
-    try {
-      // Calculate final amount with processing fee
-      const processingFee = Math.round(bookingData.totalAmount * paymentMethod.processingFee / 100)
+try {
+      // Calculate final amount with Stripe processing fee (2.9%)
+      const processingFee = Math.round(bookingData.totalAmount * 2.9 / 100)
       const finalAmount = bookingData.totalAmount + processingFee
-
       // Prepare payment data for Stripe
       const stripePaymentData = {
         amount: finalAmount * 100, // Stripe expects amount in cents
@@ -165,7 +166,7 @@ const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) 
         }
       }
 
-      // Process payment through Edge function
+// Process payment through Stripe Edge function
       const result = await apperClient.functions.invoke(import.meta.env.VITE_STRIPE_PAYMENT, {
         method: 'POST',
         headers: {
@@ -182,13 +183,12 @@ const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) 
 
       if (paymentResult.success && paymentResult.paymentIntent) {
         // Payment successful
-        toast.success("Payment processed successfully!")
+toast.success("Payment processed successfully!")
         onPaymentComplete({
           paymentId: paymentResult.paymentIntent.id,
           amount: finalAmount,
           processingFee,
-          paymentMethod: paymentMethod.id,
-          stripePaymentIntentId: paymentResult.paymentIntent.id,
+          paymentMethod: 'stripe',
           status: 'completed'
         })
       } else {
@@ -223,19 +223,19 @@ const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) 
       </div>
 
       <form onSubmit={processPayment} className="space-y-6">
-        {/* Payment Method Selected */}
+{/* Stripe Payment Method */}
         <Card className="p-4 bg-primary-50 border border-primary-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <ApperIcon name="CreditCard" size={20} className="text-primary-600 mr-3" />
               <div>
-                <h4 className="font-semibold text-slate-900">{paymentMethod.name}</h4>
-                <p className="text-sm text-slate-600">{paymentMethod.description}</p>
+                <h4 className="font-semibold text-slate-900">Stripe Payment</h4>
+                <p className="text-sm text-slate-600">Secure credit card processing</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-primary-700">{paymentMethod.processingFee}% fee</p>
-              <p className="text-xs text-slate-500">{paymentMethod.processingTime}</p>
+              <p className="text-sm font-medium text-primary-700">2.9% fee</p>
+              <p className="text-xs text-slate-500">Instant processing</p>
             </div>
           </div>
         </Card>
@@ -348,18 +348,18 @@ const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) 
             <div className="flex justify-between">
               <span className="text-slate-600">Booking Amount:</span>
               <span className="font-semibold">${bookingData.totalAmount}</span>
-            </div>
+</div>
             <div className="flex justify-between">
-              <span className="text-slate-600">Processing Fee ({paymentMethod.processingFee}%):</span>
+              <span className="text-slate-600">Processing Fee (2.9%):</span>
               <span className="font-semibold">
-                ${Math.round(bookingData.totalAmount * paymentMethod.processingFee / 100)}
+                ${Math.round(bookingData.totalAmount * 2.9 / 100)}
               </span>
             </div>
             <div className="border-t border-slate-200 pt-3">
               <div className="flex justify-between">
-                <span className="text-xl font-bold text-slate-900">Total Charge:</span>
+<span className="text-xl font-bold text-slate-900">Total Charge:</span>
                 <span className="text-2xl font-black text-gradient">
-                  ${bookingData.totalAmount + Math.round(bookingData.totalAmount * paymentMethod.processingFee / 100)}
+                  ${bookingData.totalAmount + Math.round(bookingData.totalAmount * 2.9 / 100)}
                 </span>
               </div>
             </div>
@@ -379,14 +379,13 @@ const PaymentForm = ({ bookingData, paymentMethod, onPaymentComplete, onBack }) 
               <ApperIcon name="Loader2" size={20} className="mr-2 animate-spin" />
               Processing Payment...
             </>
-          ) : (
+) : (
             <>
               <ApperIcon name="Lock" size={20} className="mr-2" />
-              Pay ${bookingData.totalAmount + Math.round(bookingData.totalAmount * paymentMethod.processingFee / 100)}
+              Pay ${bookingData.totalAmount + Math.round(bookingData.totalAmount * 2.9 / 100)}
             </>
           )}
         </Button>
-
         {/* Security Notice */}
         <div className="flex items-center justify-center text-sm text-slate-500 mt-4">
           <ApperIcon name="Shield" size={16} className="mr-2" />

@@ -301,21 +301,34 @@ const Billing = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { name: "Credit Cards", icon: "CreditCard", description: "Visa, Mastercard, Amex", color: "blue" },
-            { name: "Digital Wallets", icon: "Smartphone", description: "Apple Pay, Google Pay", color: "green" },
-            { name: "Bank Transfers", icon: "Building", description: "ACH, Wire transfers", color: "purple" },
-            { name: "Corporate Billing", icon: "Building2", description: "Purchase orders, Net terms", color: "amber" }
-          ].map((method, index) => (
-            <div key={index} className="bg-slate-50 rounded-xl p-5 text-center">
-              <div className={`p-3 rounded-lg bg-${method.color}-500 text-white inline-flex mb-3`}>
-                <ApperIcon name={method.icon} size={24} />
-              </div>
-              <h4 className="font-semibold text-slate-900 mb-2">{method.name}</h4>
-              <p className="text-sm text-slate-600">{method.description}</p>
+<div className="flex justify-center">
+          <div className="bg-slate-50 rounded-xl p-8 text-center max-w-md">
+            <div className="p-4 rounded-lg bg-blue-500 text-white inline-flex mb-4">
+              <ApperIcon name="CreditCard" size={32} />
             </div>
-          ))}
+            <h4 className="text-xl font-bold text-slate-900 mb-3">Stripe Payment Processing</h4>
+            <p className="text-slate-600 mb-4">Secure credit card processing with industry-leading security standards</p>
+            <div className="bg-white rounded-lg p-4 text-left">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <span className="text-slate-600">Supported Cards:</span>
+                  <p className="font-medium">Visa, Mastercard, Amex</p>
+                </div>
+                <div>
+                  <span className="text-slate-600">Processing Fee:</span>
+                  <p className="font-medium">2.9% per transaction</p>
+                </div>
+                <div>
+                  <span className="text-slate-600">Processing Time:</span>
+                  <p className="font-medium">Instant</p>
+                </div>
+                <div>
+                  <span className="text-slate-600">Security:</span>
+                  <p className="font-medium">PCI DSS Level 1</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Card>
 
