@@ -8,13 +8,15 @@ import Guests from "@/components/pages/Guests"
 import Bookings from "@/components/pages/Bookings"
 import Staff from "@/components/pages/Staff"
 import Reports from "@/components/pages/Reports"
+import Analytics from "@/components/pages/Analytics"
+import Billing from "@/components/pages/Billing"
 import GuestBooking from "@/components/pages/GuestBooking"
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Routes>
+<Routes>
           <Route path="/guest-booking" element={<GuestBooking />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
@@ -23,6 +25,8 @@ function App() {
             <Route path="bookings" element={<Bookings />} />
             <Route path="staff" element={<Staff />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="billing" element={<Billing />} />
           </Route>
         </Routes>
         <ToastContainer

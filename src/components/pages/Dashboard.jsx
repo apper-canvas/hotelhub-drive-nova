@@ -10,6 +10,7 @@ import ApperIcon from "@/components/ApperIcon"
 import roomsService from "@/services/api/roomsService"
 import tasksService from "@/services/api/tasksService"
 import bookingsService from "@/services/api/bookingsService"
+import analyticsService from "@/services/api/analyticsService"
 
 const Dashboard = () => {
   const [rooms, setRooms] = useState([])
@@ -64,7 +65,7 @@ const Dashboard = () => {
   }).length
 
   return (
-    <div className="space-y-8">
+<div className="space-y-8">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
@@ -84,12 +85,12 @@ const Dashboard = () => {
           trendValue="+8%"
         />
         <StatsCard
-          title="Maintenance"
-          value={maintenanceRooms}
-          icon="Wrench"
-          color="warning"
-          trend="down"
-          trendValue="-3%"
+          title="Daily Revenue"
+          value={`$${Math.round(bookings.reduce((sum, b) => b.status !== 'Cancelled' ? sum + (b.totalAmount / 5) : sum, 0))}`}
+          icon="DollarSign"
+          color="success"
+          trend="up"
+          trendValue="+23%"
         />
         <StatsCard
           title="Today's Check-ins"

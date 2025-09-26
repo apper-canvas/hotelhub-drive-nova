@@ -9,7 +9,11 @@
     "checkOut": "2023-12-20T11:00:00Z",
     "totalAmount": 1600,
     "status": "Confirmed",
-    "specialRequests": "Late check-in requested, vegetarian meals"
+    "specialRequests": "Late check-in requested, vegetarian meals",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   },
   {
     "Id": 2,
@@ -21,7 +25,11 @@
     "checkOut": "2023-12-22T11:00:00Z",
     "totalAmount": 480,
     "status": "Confirmed",
-    "specialRequests": ""
+    "specialRequests": "",
+    "bookingSource": "Booking.com",
+    "commissionRate": 15,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   },
   {
     "Id": 3,
@@ -33,7 +41,11 @@
     "checkOut": "2023-12-27T11:00:00Z",
     "totalAmount": 3500,
     "status": "Pending",
-    "specialRequests": "Business center access, early check-in"
+    "specialRequests": "Business center access, early check-in",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Corporate"
   },
   {
     "Id": 4,
@@ -45,7 +57,11 @@
     "checkOut": "2023-12-19T11:00:00Z",
     "totalAmount": 540,
     "status": "Checked In",
-    "specialRequests": "Quiet room, high floor preferred"
+    "specialRequests": "Quiet room, high floor preferred",
+    "bookingSource": "Expedia",
+    "commissionRate": 18,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   },
   {
     "Id": 5,
@@ -57,7 +73,11 @@
     "checkOut": "2023-12-14T11:00:00Z",
     "totalAmount": 480,
     "status": "Checked Out",
-    "specialRequests": "Accessibility requirements"
+    "specialRequests": "Accessibility requirements",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Bank Transfer"
   },
   {
     "Id": 6,
@@ -69,7 +89,11 @@
     "checkOut": "2023-12-29T11:00:00Z",
     "totalAmount": 2100,
     "status": "Confirmed",
-    "specialRequests": "Ocean view essential, gluten-free dietary requirements"
+    "specialRequests": "Ocean view essential, gluten-free dietary requirements",
+    "bookingSource": "Agoda",
+    "commissionRate": 14,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   },
   {
     "Id": 7,
@@ -81,7 +105,11 @@
     "checkOut": "2023-12-30T11:00:00Z",
     "totalAmount": 800,
     "status": "Confirmed",
-    "specialRequests": "Balcony room preferred"
+    "specialRequests": "Balcony room preferred",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Digital Wallet"
   },
   {
     "Id": 8,
@@ -93,7 +121,11 @@
     "checkOut": "2023-12-15T11:00:00Z",
     "totalAmount": 330,
     "status": "Cancelled",
-    "specialRequests": "Pet-friendly room, ground floor"
+    "specialRequests": "Pet-friendly room, ground floor",
+    "bookingSource": "Booking.com",
+    "commissionRate": 15,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Refunded"
   },
   {
     "Id": 9,
@@ -105,7 +137,11 @@
     "checkOut": "2024-01-10T11:00:00Z",
     "totalAmount": 600,
     "status": "Pending",
-    "specialRequests": "VIP treatment, room service breakfast"
+    "specialRequests": "VIP treatment, room service breakfast",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Corporate"
   },
   {
     "Id": 10,
@@ -117,7 +153,11 @@
     "checkOut": "2024-01-18T11:00:00Z",
     "totalAmount": 360,
     "status": "Confirmed",
-    "specialRequests": "Wi-Fi access essential"
+    "specialRequests": "Wi-Fi access essential",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   },
   {
     "Id": 11,
@@ -129,7 +169,11 @@
     "checkOut": "2024-02-07T11:00:00Z",
     "totalAmount": 960,
     "status": "Confirmed",
-    "specialRequests": "Extended stay, weekly housekeeping"
+    "specialRequests": "Extended stay, weekly housekeeping",
+    "bookingSource": "Expedia",
+    "commissionRate": 18,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   },
   {
     "Id": 12,
@@ -141,6 +185,10 @@
     "checkOut": "2024-02-17T11:00:00Z",
     "totalAmount": 1500,
     "status": "Pending",
-    "specialRequests": "Valentine's weekend special, champagne service"
+    "specialRequests": "Valentine's weekend special, champagne service",
+    "bookingSource": "Direct",
+    "commissionRate": 0,
+    "revenueCategory": "Rooms",
+    "paymentMethod": "Credit Card"
   }
 ]
