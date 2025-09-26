@@ -110,7 +110,7 @@ const billingService = {
     return { ...newInvoice }
   },
 
-  async processPayment(invoiceId, paymentData) {
+async processPayment(invoiceId, paymentData) {
     await new Promise(resolve => setTimeout(resolve, 800))
     
     const index = mockInvoices.findIndex(inv => inv.Id === invoiceId)
@@ -118,26 +118,26 @@ const billingService = {
       throw new Error(`Invoice with ID ${invoiceId} not found`)
     }
     
-    // Simulate payment processing
+    // Simulate payment processing with Stripe-compatible data
     const paymentMethods = {
-      card: { processingFee: 0.029, processingTime: "Instant" },
-      bank: { processingFee: 0.015, processingTime: "1-2 business days" },
-      wallet: { processingFee: 0.025, processingTime: "Instant" },
-      corporate: { processingFee: 0, processingTime: "Net 30" }
+      credit_card: { processingFee: 0.029, processingTime: "Instant", stripeMethod: "card" },
+      digital_wallet: { processingFee: 0.025, processingTime: "Instant", stripeMethod: "card" },
+      bank_transfer: { processingFee: 0.015, processingTime: "1-2 business days", stripeMethod: "ach_debit" },
+      corporate: { processingFee: 0, processingTime: "Net 30", stripeMethod: "corporate" }
     }
     
-    const method = paymentMethods[paymentData.method] || paymentMethods.card
+    const method = paymentMethods[paymentData.method] || paymentMethods.credit_card
     const processingFee = Math.round(paymentData.amount * method.processingFee)
     
     mockInvoices[index] = {
       ...mockInvoices[index],
       status: "Paid",
       paymentMethod: paymentData.method,
+      stripePaymentIntentId: paymentData.stripePaymentIntentId || null,
       paymentDate: new Date().toISOString(),
       processingFee,
       netAmount: paymentData.amount - processingFee
     }
-    
     return { ...mockInvoices[index] }
   },
 
@@ -157,7 +157,7 @@ const billingService = {
     }
   },
 
-  async getPaymentMethods() {
+async getPaymentMethods() {
     await new Promise(resolve => setTimeout(resolve, 200))
     
     return [
@@ -167,7 +167,8 @@ const billingService = {
         description: "Visa, Mastercard, American Express",
         processingFee: 2.9,
         processingTime: "Instant",
-        supported: true
+        supported: true,
+        stripeCompatible: true
       },
       {
         id: "digital_wallet",
@@ -175,7 +176,8 @@ const billingService = {
         description: "Apple Pay, Google Pay, PayPal",
         processingFee: 2.5,
         processingTime: "Instant",
-        supported: true
+        supported: true,
+        stripeCompatible: true
       },
       {
         id: "bank_transfer",
@@ -183,7 +185,8 @@ const billingService = {
         description: "ACH, Wire transfer",
         processingFee: 1.5,
         processingTime: "1-2 business days",
-        supported: true
+        supported: true,
+        stripeCompatible: false
       },
       {
         id: "corporate",
@@ -191,7 +194,8 @@ const billingService = {
         description: "Purchase order, Net terms",
         processingFee: 0,
         processingTime: "Net 30",
-        supported: true
+        supported: true,
+        stripeCompatible: false
       }
     ]
   },

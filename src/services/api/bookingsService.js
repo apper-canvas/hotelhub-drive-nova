@@ -15,21 +15,30 @@ const bookingsService = {
     return { ...booking }
   },
 
-  async create(bookingData) {
+async create(bookingData) {
     await new Promise(resolve => setTimeout(resolve, 500))
     const newId = Math.max(...bookingsData.map(booking => booking.Id)) + 1
-    const newBooking = { ...bookingData, Id: newId }
+    const newBooking = { 
+      ...bookingData, 
+      Id: newId,
+      createdAt: bookingData.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
     bookingsData.push(newBooking)
     return { ...newBooking }
   },
 
-  async update(id, bookingData) {
+async update(id, bookingData) {
     await new Promise(resolve => setTimeout(resolve, 400))
     const index = bookingsData.findIndex(booking => booking.Id === id)
     if (index === -1) {
       throw new Error(`Booking with ID ${id} not found`)
     }
-    bookingsData[index] = { ...bookingData, Id: id }
+    bookingsData[index] = { 
+      ...bookingData, 
+      Id: id,
+      updatedAt: new Date().toISOString()
+    }
     return { ...bookingsData[index] }
   },
 

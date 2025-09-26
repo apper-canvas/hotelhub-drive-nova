@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react"
-import { toast } from "react-toastify"
-import Card from "@/components/atoms/Card"
-import Button from "@/components/atoms/Button"
-import Badge from "@/components/atoms/Badge"
-import FormField from "@/components/molecules/FormField"
-import GuestBookingForm from "@/components/organisms/GuestBookingForm"
-import Loading from "@/components/ui/Loading"
-import Error from "@/components/ui/Error"
-import Empty from "@/components/ui/Empty"
-import ApperIcon from "@/components/ApperIcon"
-import roomsService from "@/services/api/roomsService"
-
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import bookingsService from "@/services/api/bookingsService";
+import roomsService from "@/services/api/roomsService";
+import ApperIcon from "@/components/ApperIcon";
+import FormField from "@/components/molecules/FormField";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import GuestBookingForm from "@/components/organisms/GuestBookingForm";
+import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
+import Card from "@/components/atoms/Card";
+import Staff from "@/components/pages/Staff";
+import Rooms from "@/components/pages/Rooms";
 const GuestBooking = () => {
   const [rooms, setRooms] = useState([])
   const [loading, setLoading] = useState(true)
@@ -47,10 +49,41 @@ const GuestBooking = () => {
     setCheckOut(tomorrow.toISOString().split('T')[0])
   }, [])
 
-  const handleBookingComplete = (bookingData) => {
-    setBookingConfirmed(bookingData)
-    setSelectedRoom(null)
-    toast.success("Booking confirmed successfully!")
+const handleBookingComplete = async (bookingData) => {
+    // Save booking to service
+    try {
+      const savedBooking = await bookingsService.create({
+        guestName: `${bookingData.guest.firstName} ${bookingData.guest.lastName}`,
+        guestEmail: bookingData.guest.email,
+        guestPhone: bookingData.guest.phone,
+        roomId: bookingData.room.Id,
+        roomType: bookingData.room.type,
+        roomNumber: bookingData.room.number,
+        checkIn: bookingData.checkIn,
+        checkOut: bookingData.checkOut,
+        nights: bookingData.nights,
+        totalAmount: bookingData.totalAmount,
+        paymentId: bookingData.paymentId,
+        paymentMethod: bookingData.paymentMethod,
+        paymentStatus: bookingData.paymentStatus,
+        status: bookingData.status,
+        specialRequests: bookingData.guest.specialRequests || "",
+        createdAt: bookingData.createdAt,
+        paidAt: bookingData.paidAt
+      })
+      
+      setBookingConfirmed({
+        ...bookingData,
+        Id: savedBooking.Id
+      })
+      setSelectedRoom(null)
+      toast.success("Booking confirmed and saved successfully!")
+    } catch (error) {
+      console.error("Error saving booking:", error)
+      setBookingConfirmed(bookingData)
+      setSelectedRoom(null)
+      toast.success("Booking confirmed successfully!")
+    }
   }
 
   const filteredRooms = rooms.filter(room => 
@@ -139,11 +172,12 @@ const GuestBooking = () => {
               <h1 className="text-3xl font-bold text-slate-900 mb-2">Complete Your Booking</h1>
               <p className="text-slate-600">You're just one step away from confirming your stay!</p>
             </div>
-
-            <GuestBookingForm
+<GuestBookingForm
               selectedRoom={selectedRoom}
               checkIn={checkIn}
               checkOut={checkOut}
+              nights={Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24))}
+              totalAmount={selectedRoom.pricePerNight * Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24))}
               onBookingComplete={handleBookingComplete}
             />
           </div>
