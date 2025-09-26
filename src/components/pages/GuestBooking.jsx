@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import bookingsService from "@/services/api/bookingsService";
 import roomsService from "@/services/api/roomsService";
@@ -201,13 +202,22 @@ const handleBookingComplete = async (bookingData) => {
                 <p className="text-sm text-slate-600">Book Your Perfect Stay</p>
               </div>
             </div>
-            <a 
-              href="/"
-              className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 transition-colors"
-            >
-              <ApperIcon name="Shield" size={16} />
-              Staff Portal
-            </a>
+<div className="flex items-center gap-4">
+              <Link 
+                to="/guest-booking/profile"
+                className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 transition-colors"
+              >
+                <ApperIcon name="User" size={16} />
+                My Profile
+              </Link>
+              <a 
+                href="/"
+                className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 transition-colors"
+              >
+                <ApperIcon name="Shield" size={16} />
+                Staff Portal
+              </a>
+            </div>
           </div>
         </div>
       </div>
