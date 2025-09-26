@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import PaymentForm from "@/components/organisms/PaymentForm";
 import billingService from "@/services/api/billingService";
 import ApperIcon from "@/components/ApperIcon";
 import FormField from "@/components/molecules/FormField";
 import Loading from "@/components/ui/Loading";
+import PaymentForm from "@/components/organisms/PaymentForm";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
 const GuestBookingForm = ({ selectedRoom, checkIn, checkOut, onBookingComplete }) => {
@@ -431,12 +431,12 @@ const loadPaymentMethods = async () => {
         <PaymentForm
           bookingData={bookingData}
           paymentMethod={paymentMethods.find(m => m.id === paymentData.method)}
-          onPaymentComplete={handlePaymentComplete}
+onPaymentComplete={handlePaymentComplete}
           onBack={() => handleBackToStep(2)}
         />
-/>
-      )}
+)}
     </Card>
   )
+}
 
 export default GuestBookingForm
