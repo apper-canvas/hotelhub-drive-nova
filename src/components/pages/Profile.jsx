@@ -17,12 +17,6 @@ const Profile = () => {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
   const [formData, setFormData] = useState({})
-  const [showPasswordChange, setShowPasswordChange] = useState(false)
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: ""
-  })
 
   const roleColors = {
     ADMIN: "success",
@@ -68,29 +62,6 @@ const Profile = () => {
     }
   }
 
-  const handlePasswordChange = async () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("New passwords do not match")
-      return
-    }
-    
-    if (passwordData.newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters long")
-      return
-    }
-
-    try {
-      setSaving(true)
-      await profileService.updatePassword(profile.Id, passwordData.oldPassword, passwordData.newPassword)
-      setShowPasswordChange(false)
-      setPasswordData({ oldPassword: "", newPassword: "", confirmPassword: "" })
-      toast.success("Password updated successfully!")
-    } catch (err) {
-      toast.error(`Failed to update password: ${err.message}`)
-    } finally {
-      setSaving(false)
-    }
-  }
 
   const handleCancel = () => {
     setFormData(profile)
@@ -173,38 +144,10 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-slate-200">
-                <Button
-                  onClick={() => setShowPasswordChange(!showPasswordChange)}
-                  variant="outline"
-                  size="sm"
-                  className="w-full"
-                >
-                  <ApperIcon name="Key" size={16} />
-                  Change Password
-                </Button>
-              </div>
             </div>
           </Card>
 
-          {/* Permissions Card */}
-          <Card className="p-6 mt-6">
-            <h4 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-              <ApperIcon name="Shield" size={20} />
-              Permissions
-            </h4>
-            <div className="space-y-2">
-              {profile.permissions.map((permission) => (
-                <div key={permission} className="flex items-center gap-2 text-sm">
-                  <ApperIcon name="Check" size={14} className="text-emerald-500" />
-                  <span className="text-slate-600 capitalize">
-                    {permission.replace(/_/g, ' ')}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+</div>
 
         {/* Profile Details */}
         <div className="lg:col-span-2 space-y-6">
@@ -328,68 +271,6 @@ const Profile = () => {
             </div>
           </Card>
 
-          {/* Password Change Form */}
-          {showPasswordChange && (
-            <Card className="p-6">
-              <h4 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-                <ApperIcon name="Key" size={20} />
-                Change Password
-              </h4>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Current Password
-                  </label>
-                  <Input
-                    type="password"
-                    value={passwordData.oldPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, oldPassword: e.target.value }))}
-                    placeholder="Enter current password"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    New Password
-                  </label>
-                  <Input
-                    type="password"
-                    value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                    placeholder="Enter new password (min 8 characters)"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Confirm New Password
-                  </label>
-                  <Input
-                    type="password"
-                    value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                    placeholder="Confirm new password"
-                  />
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <Button onClick={handlePasswordChange} variant="primary" loading={saving}>
-                    Update Password
-                  </Button>
-                  <Button 
-                    onClick={() => {
-                      setShowPasswordChange(false)
-                      setPasswordData({ oldPassword: "", newPassword: "", confirmPassword: "" })
-                    }} 
-                    variant="outline"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          )}
         </div>
       </div>
     </div>
