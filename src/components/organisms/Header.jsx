@@ -1,9 +1,23 @@
-import React from "react"
-import ApperIcon from "@/components/ApperIcon"
-import Avatar from "@/components/atoms/Avatar"
-import Badge from "@/components/atoms/Badge"
+import React, { useContext } from "react";
+import { useSelector } from "react-redux";
+import { AuthContext } from "../../App";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import Avatar from "@/components/atoms/Avatar";
+import Badge from "@/components/atoms/Badge";
 
 const Header = ({ onToggleSidebar }) => {
+  const { logout } = useContext(AuthContext)
+  const { user, isAuthenticated } = useSelector((state) => state.user)
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
+  }
+
   return (
     <header className="bg-white border-b border-slate-200 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -16,7 +30,9 @@ const Header = ({ onToggleSidebar }) => {
           </button>
           
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Good morning, Admin</h2>
+            <h2 className="text-xl font-bold text-slate-900">
+              Good morning, {isAuthenticated ? user?.firstName || user?.first_name_c || "Admin" : "Admin"}
+            </h2>
             <p className="text-sm text-slate-600">Here's what's happening at your hotel today</p>
           </div>
         </div>
@@ -32,11 +48,34 @@ const Header = ({ onToggleSidebar }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Avatar fallback="A" size="md" />
+            <Avatar 
+              fallback={
+                isAuthenticated && user ? 
+                `${(user.firstName || user.first_name_c || "A").charAt(0)}${(user.lastName || user.last_name_c || "U").charAt(0)}` : 
+                "A"
+              } 
+              size="md" 
+            />
             <div className="hidden sm:block">
-              <p className="text-sm font-semibold text-slate-900">Admin User</p>
-              <p className="text-xs text-slate-600">Hotel Manager</p>
+              <p className="text-sm font-semibold text-slate-900">
+                {isAuthenticated ? 
+                  `${user?.firstName || user?.first_name_c || "Admin"} ${user?.lastName || user?.last_name_c || "User"}` : 
+                  "Admin User"
+                }
+              </p>
+              <p className="text-xs text-slate-600">
+                {isAuthenticated ? user?.role_c || "Hotel Manager" : "Hotel Manager"}
+              </p>
             </div>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleLogout}
+              className="flex items-center gap-2"
+            >
+              <ApperIcon name="LogOut" size={16} />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
           </div>
         </div>
       </div>

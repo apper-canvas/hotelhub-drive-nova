@@ -1,47 +1,98 @@
-import staffData from "@/services/mockData/staff.json"
+// Staff data is handled through the profile_c table with role filtering
+import profileService from "./profileService"
 
 const staffService = {
   async getAll() {
     await new Promise(resolve => setTimeout(resolve, 300))
-    return [...staffData]
+    
+    try {
+      // Get all profiles and filter for staff roles
+      const allProfiles = await profileService.getAll()
+      return allProfiles.filter(profile => 
+        ['STAFF', 'RECEPTION', 'MANAGER', 'ADMIN'].includes(profile.role_c)
+      )
+    } catch (error) {
+      console.error("Error fetching staff:", error?.response?.data?.message || error)
+      return []
+    }
   },
 
   async getById(id) {
     await new Promise(resolve => setTimeout(resolve, 200))
-    const member = staffData.find(member => member.Id === id)
-    if (!member) {
-      throw new Error(`Staff member with ID ${id} not found`)
+    
+    try {
+      const profile = await profileService.getById(id)
+      
+      // Ensure the profile is a staff member
+      if (!['STAFF', 'RECEPTION', 'MANAGER', 'ADMIN'].includes(profile.role_c)) {
+        throw new Error(`Profile with ID ${id} is not a staff member`)
+      }
+      
+      return profile
+    } catch (error) {
+      console.error(`Error fetching staff member ${id}:`, error?.response?.data?.message || error)
+      throw error
     }
-    return { ...member }
+  },
+
+  async getByRole(role) {
+    await new Promise(resolve => setTimeout(resolve, 300))
+    
+    try {
+      return await profileService.getByRole(role)
+    } catch (error) {
+      console.error("Error fetching staff by role:", error?.response?.data?.message || error)
+      return []
+    }
   },
 
   async create(memberData) {
     await new Promise(resolve => setTimeout(resolve, 500))
-    const newId = Math.max(...staffData.map(member => member.Id)) + 1
-    const newMember = { ...memberData, Id: newId }
-    staffData.push(newMember)
-    return { ...newMember }
+    
+    try {
+      // Ensure the role is a staff role
+      if (!['STAFF', 'RECEPTION', 'MANAGER', 'ADMIN'].includes(memberData.role_c || memberData.role)) {
+        memberData.role_c = memberData.role || 'STAFF'
+      }
+      
+      return await profileService.create(memberData)
+    } catch (error) {
+      console.error("Error creating staff member:", error?.response?.data?.message || error)
+      throw error
+    }
   },
 
   async update(id, memberData) {
     await new Promise(resolve => setTimeout(resolve, 400))
-    const index = staffData.findIndex(member => member.Id === id)
-    if (index === -1) {
-      throw new Error(`Staff member with ID ${id} not found`)
+    
+    try {
+      // Ensure the role remains a staff role
+      if (memberData.role_c || memberData.role) {
+        const role = memberData.role_c || memberData.role
+        if (!['STAFF', 'RECEPTION', 'MANAGER', 'ADMIN'].includes(role)) {
+          memberData.role_c = 'STAFF'
+        }
+      }
+      
+      return await profileService.update(id, memberData)
+    } catch (error) {
+      console.error("Error updating staff member:", error?.response?.data?.message || error)
+      throw error
     }
-    staffData[index] = { ...memberData, Id: id }
-    return { ...staffData[index] }
   },
 
   async delete(id) {
     await new Promise(resolve => setTimeout(resolve, 300))
-    const index = staffData.findIndex(member => member.Id === id)
-    if (index === -1) {
-      throw new Error(`Staff member with ID ${id} not found`)
+    
+    try {
+      return await profileService.delete(id)
+    } catch (error) {
+      console.error("Error deleting staff member:", error?.response?.data?.message || error)
+      return false
     }
-    staffData.splice(index, 1)
-    return true
   }
 }
+
+export default staffService
 
 export default staffService

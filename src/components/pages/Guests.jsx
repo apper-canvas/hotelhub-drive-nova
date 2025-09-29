@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from "react"
-import { toast } from "react-toastify"
-import GuestCard from "@/components/molecules/GuestCard"
-import Button from "@/components/atoms/Button"
-import Card from "@/components/atoms/Card"
-import FormField from "@/components/molecules/FormField"
-import Loading from "@/components/ui/Loading"
-import Error from "@/components/ui/Error"
-import Empty from "@/components/ui/Empty"
-import ApperIcon from "@/components/ApperIcon"
-import guestsService from "@/services/api/guestsService"
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Bookings from "@/components/pages/Bookings";
+import Profile from "@/components/pages/Profile";
+import Button from "@/components/atoms/Button";
+import Card from "@/components/atoms/Card";
+import FormField from "@/components/molecules/FormField";
+import GuestCard from "@/components/molecules/GuestCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import guestsData from "@/services/mockData/guests.json";
+import staffData from "@/services/mockData/staff.json";
+import bookingsData from "@/services/mockData/bookings.json";
+import roomsData from "@/services/mockData/rooms.json";
+import tasksData from "@/services/mockData/tasks.json";
+import profilesData from "@/services/mockData/profiles.json";
+import guestsService from "@/services/api/guestsService";
 
 const Guests = () => {
   const [guests, setGuests] = useState([])
@@ -37,10 +45,10 @@ const Guests = () => {
   if (loading) return <Loading />
   if (error) return <Error message={error} onRetry={loadGuests} />
 
-  const filteredGuests = guests.filter(guest => 
-    `${guest.firstName} ${guest.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    guest.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    guest.phone.includes(searchTerm)
+const filteredGuests = guests.filter(guest => 
+    `${guest.first_name_c || guest.firstName || ""} ${guest.last_name_c || guest.lastName || ""}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (guest.email_c || guest.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (guest.phone_c || guest.phone || "").includes(searchTerm)
   )
 
   return (
@@ -114,9 +122,9 @@ const Guests = () => {
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-slate-900">
-                    {selectedGuest.firstName} {selectedGuest.lastName}
+{selectedGuest.first_name_c || selectedGuest.firstName} {selectedGuest.last_name_c || selectedGuest.lastName}
                   </h2>
-                  <p className="text-slate-600">{selectedGuest.email}</p>
+                  <p className="text-slate-600">{selectedGuest.email_c || selectedGuest.email}</p>
                 </div>
                 <button 
                   onClick={() => setSelectedGuest(null)}
@@ -131,65 +139,66 @@ const Guests = () => {
                   {/* Contact Information */}
                   <div>
                     <h3 className="text-lg font-bold text-slate-900 mb-4">Contact Information</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <FormField
                         label="First Name"
-                        value={selectedGuest.firstName}
+                        value={selectedGuest.first_name_c || selectedGuest.firstName}
                         readOnly
                       />
                       <FormField
                         label="Last Name"
-                        value={selectedGuest.lastName}
-                        readOnly
-                      />
-                      <FormField
-                        label="Email"
-                        value={selectedGuest.email}
-                        readOnly
-                      />
-                      <FormField
-                        label="Phone"
-                        value={selectedGuest.phone}
+                        value={selectedGuest.last_name_c || selectedGuest.lastName}
                         readOnly
                       />
                     </div>
+                    <FormField
+                      label="Email"
+                      value={selectedGuest.email_c || selectedGuest.email}
+                      readOnly
+                    />
+                    <FormField
+                      label="Phone"
+                      value={selectedGuest.phone_c || selectedGuest.phone}
+                      readOnly
+                    />
                   </div>
-
                   {/* Preferences */}
-                  {selectedGuest.preferences && Object.keys(selectedGuest.preferences).length > 0 && (
+{(selectedGuest.preferences_c || selectedGuest.preferences) && (
                     <div>
                       <h3 className="text-lg font-bold text-slate-900 mb-4">Preferences</h3>
                       <div className="bg-slate-50 rounded-xl p-4">
-                        {Object.entries(selectedGuest.preferences).map(([key, value]) => (
-                          <div key={key} className="flex justify-between py-2 border-b border-slate-200 last:border-b-0">
-                            <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                            <span className="text-slate-600">{value}</span>
-                          </div>
-                        ))}
+                        <p className="text-slate-700">{selectedGuest.preferences_c || selectedGuest.preferences}</p>
                       </div>
                     </div>
                   )}
-                </div>
-
-                <div className="space-y-6">
-                  {/* Guest Status */}
-                  <Card variant="gradient" className="p-4">
-                    <h4 className="font-bold text-slate-900 mb-3">Guest Status</h4>
-                    <div className="space-y-2">
-                      {selectedGuest.vipStatus && (
+                  
+                  <div className="flex items-center gap-6 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-xl">
+                    <div className="flex items-center gap-2">
+                      <ApperIcon name="Shield" size={20} className="text-blue-600" />
+                      <div>
+                        <p className="font-semibold text-slate-900">Account Status</p>
+                        <p className="text-sm text-emerald-600">Active Guest</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {(selectedGuest.vip_status_c || selectedGuest.vipStatus) && (
                         <div className="flex items-center gap-2 text-amber-700">
                           <ApperIcon name="Crown" size={16} />
                           <span className="font-semibold">VIP Guest</span>
                         </div>
                       )}
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <ApperIcon name="Calendar" size={16} />
-                        <span>{selectedGuest.stayHistory?.length || 0} stays</span>
-                      </div>
+                      
+                      <div className="flex items-center gap-2 text-slate-700">
+                        <ApperIcon name="History" size={16} />
+                        <span>{selectedGuest.stay_history_c || selectedGuest.stayHistory || "No history"}</span>
+</div>
                     </div>
-                  </Card>
+                  </div>
+                </div>
 
-                  {/* Actions */}
+                {/* Sidebar Actions */}
+                <div className="space-y-6">
                   <div className="space-y-3">
                     <Button variant="primary" className="w-full">
                       <ApperIcon name="Edit" size={18} className="mr-2" />
