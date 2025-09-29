@@ -102,5 +102,3 @@ const guestsService = {
 }
 
 export default guestsService
-
-export default guestsService

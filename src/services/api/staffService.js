@@ -94,5 +94,3 @@ const staffService = {
 }
 
 export default staffService
-
-export default staffService

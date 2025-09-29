@@ -248,5 +248,3 @@ const bookingsService = {
 }
 
 export default bookingsService
-
-export default bookingsService
