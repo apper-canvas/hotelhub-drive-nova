@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react"
-import { toast } from "react-toastify"
-import Card from "@/components/atoms/Card"
-import Button from "@/components/atoms/Button"
-import Input from "@/components/atoms/Input"
-import Badge from "@/components/atoms/Badge"
-import Avatar from "@/components/atoms/Avatar"
-import Loading from "@/components/ui/Loading"
-import Error from "@/components/ui/Error"
-import ApperIcon from "@/components/ApperIcon"
-import profileService from "@/services/api/profileService"
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
+import Avatar from "@/components/atoms/Avatar";
+import Badge from "@/components/atoms/Badge";
+import Card from "@/components/atoms/Card";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import profileService from "@/services/api/profileService";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
@@ -17,6 +17,8 @@ const Profile = () => {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
   const [formData, setFormData] = useState({})
+  const [users, setUsers] = useState([])
+  const [usersLoading, setUsersLoading] = useState(false)
 
   const roleColors = {
     ADMIN: "success",
@@ -24,6 +26,35 @@ const Profile = () => {
     RECEPTION: "info",
     STAFF: "warning",
     GUEST: "default"
+  }
+
+  const loadUsers = async () => {
+    try {
+      setUsersLoading(true)
+      const { ApperClient } = window.ApperSDK
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      })
+
+      const params = {
+        fields: [{"field": {"Name": "Name"}}],
+        orderBy: [{"fieldName": "Name", "sorttype": "ASC"}]
+      }
+
+      const response = await apperClient.fetchRecords('users_c', params)
+      
+      if (response?.data?.length) {
+        setUsers(response.data)
+      } else {
+        setUsers([])
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error?.response?.data?.message || error)
+      setUsers([])
+    } finally {
+      setUsersLoading(false)
+    }
   }
 
   const loadProfile = async () => {
@@ -42,16 +73,17 @@ const Profile = () => {
 
   useEffect(() => {
     loadProfile()
+    loadUsers()
   }, [])
 
-  const handleInputChange = (field, value) => {
+const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
   const handleSaveProfile = async () => {
     try {
       setSaving(true)
-      const updatedProfile = await profileService.update(profile.Id, formData)
+      const updatedProfile = await profileService.update(profile?.Id, formData)
       setProfile(updatedProfile)
       setIsEditing(false)
       toast.success("Profile updated successfully!")
@@ -62,9 +94,8 @@ const Profile = () => {
     }
   }
 
-
   const handleCancel = () => {
-    setFormData(profile)
+    setFormData(profile || {})
     setIsEditing(false)
   }
 
@@ -105,19 +136,19 @@ const Profile = () => {
             <div className="text-center">
               <div className="mb-6">
                 <Avatar
-                  src={profile.avatar}
-                  name={`${profile.firstName} ${profile.lastName}`}
+                  src={profile?.avatar}
+                  name={`${profile?.firstName || ''} ${profile?.lastName || ''}`}
                   size="xl"
                   className="mx-auto mb-4"
                 />
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-slate-900">
-                    {profile.firstName} {profile.lastName}
+                    {profile?.firstName} {profile?.lastName}
                   </h3>
-                  <Badge variant={roleColors[profile.role]} size="lg">
-                    {profile.role}
+                  <Badge variant={roleColors[profile?.role] || 'default'} size="lg">
+                    {profile?.role}
                   </Badge>
-                  {profile.department && (
+                  {profile?.department && (
                     <p className="text-slate-600">{profile.department}</p>
                   )}
                 </div>
@@ -126,28 +157,26 @@ const Profile = () => {
               <div className="space-y-4 text-left">
                 <div className="flex items-center gap-3 text-sm">
                   <ApperIcon name="Mail" size={16} className="text-slate-500" />
-                  <span className="text-slate-700">{profile.email}</span>
+                  <span className="text-slate-700">{profile?.email}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <ApperIcon name="Phone" size={16} className="text-slate-500" />
-                  <span className="text-slate-700">{profile.phone}</span>
+                  <span className="text-slate-700">{profile?.phone}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <ApperIcon name="Calendar" size={16} className="text-slate-500" />
                   <span className="text-slate-700">
-                    Joined {new Date(profile.joinDate).toLocaleDateString()}
+                    Joined {profile?.joinDate ? new Date(profile.joinDate).toLocaleDateString() : 'N/A'}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <ApperIcon name="CheckCircle2" size={16} className="text-emerald-500" />
-                  <span className="text-slate-700">Status: {profile.status}</span>
+                  <span className="text-slate-700">Status: {profile?.status}</span>
                 </div>
               </div>
-
             </div>
           </Card>
-
-</div>
+        </div>
 
         {/* Profile Details */}
         <div className="lg:col-span-2 space-y-6">
@@ -164,7 +193,7 @@ const Profile = () => {
                   First Name
                 </label>
                 <Input
-                  value={formData.firstName || ""}
+                  value={formData?.firstName || ""}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
                   disabled={!isEditing}
                   placeholder="Enter first name"
@@ -176,7 +205,7 @@ const Profile = () => {
                   Last Name
                 </label>
                 <Input
-                  value={formData.lastName || ""}
+                  value={formData?.lastName || ""}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
                   disabled={!isEditing}
                   placeholder="Enter last name"
@@ -189,7 +218,7 @@ const Profile = () => {
                 </label>
                 <Input
                   type="email"
-                  value={formData.email || ""}
+                  value={formData?.email || ""}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   disabled={!isEditing}
                   placeholder="Enter email address"
@@ -202,38 +231,64 @@ const Profile = () => {
                 </label>
                 <Input
                   type="tel"
-                  value={formData.phone || ""}
+                  value={formData?.phone || ""}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
                   disabled={!isEditing}
                   placeholder="Enter phone number"
                 />
               </div>
 
-              {profile.role !== "GUEST" && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Role
+                </label>
+                <div className="flex items-center h-10">
+                  <Badge variant={roleColors[profile?.role] || 'default'} size="lg">
+                    {profile?.role}
+                  </Badge>
+                  <span className="text-xs text-slate-500 ml-2">Contact admin to change role</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  User
+                </label>
+                {usersLoading ? (
+                  <div className="flex items-center h-10 px-3 border border-slate-200 rounded-md bg-slate-50">
+                    <ApperIcon name="Loader2" size={16} className="animate-spin mr-2" />
+                    <span className="text-sm text-slate-500">Loading users...</span>
+                  </div>
+                ) : (
+                  <select
+                    value={formData?.users_c || ""}
+                    onChange={(e) => handleInputChange("users_c", parseInt(e.target.value) || "")}
+                    disabled={!isEditing}
+                    className="w-full h-10 px-3 border border-slate-200 rounded-md bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
+                  >
+                    <option value="">Select a user</option>
+                    {users?.map((user) => (
+                      <option key={user.Id} value={user.Id}>
+                        {user.Name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {profile?.role !== "GUEST" && (
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Department
                   </label>
                   <Input
-                    value={formData.department || ""}
+                    value={formData?.department || ""}
                     onChange={(e) => handleInputChange("department", e.target.value)}
                     disabled={!isEditing}
                     placeholder="Enter department"
                   />
                 </div>
               )}
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Role
-                </label>
-                <div className="flex items-center h-10">
-                  <Badge variant={roleColors[profile.role]} size="lg">
-                    {profile.role}
-                  </Badge>
-                  <span className="text-xs text-slate-500 ml-2">Contact admin to change role</span>
-                </div>
-              </div>
             </div>
           </Card>
 
@@ -250,7 +305,7 @@ const Profile = () => {
                   Address
                 </label>
                 <Input
-                  value={formData.address || ""}
+                  value={formData?.address || ""}
                   onChange={(e) => handleInputChange("address", e.target.value)}
                   disabled={!isEditing}
                   placeholder="Enter full address"
@@ -262,7 +317,7 @@ const Profile = () => {
                   Emergency Contact
                 </label>
                 <Input
-                  value={formData.emergencyContact || ""}
+                  value={formData?.emergencyContact || ""}
                   onChange={(e) => handleInputChange("emergencyContact", e.target.value)}
                   disabled={!isEditing}
                   placeholder="Name and phone number"
@@ -270,7 +325,6 @@ const Profile = () => {
               </div>
             </div>
           </Card>
-
         </div>
       </div>
     </div>
