@@ -11,7 +11,6 @@ import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
 import Loading from "@/components/ui/Loading";
 import guestsData from "@/services/mockData/guests.json";
-import staffData from "@/services/mockData/staff.json";
 import bookingsData from "@/services/mockData/bookings.json";
 import roomsData from "@/services/mockData/rooms.json";
 import tasksData from "@/services/mockData/tasks.json";
