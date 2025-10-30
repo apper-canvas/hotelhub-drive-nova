@@ -1,0 +1,152 @@
+[
+  {
+    "Id": 1,
+    "title": "Clean Room 302",
+    "description": "Deep cleaning required after checkout. Replace linens and restock amenities.",
+    "status": "in-progress",
+    "priority": "high",
+    "assignedTo": "Maria Rodriguez",
+    "dueDate": "2024-01-15T14:00:00",
+    "type": "housekeeping"
+  },
+  {
+    "Id": 2,
+    "title": "Fix Air Conditioning - Room 405",
+    "description": "Guest reported AC unit not cooling properly. Check thermostat and refrigerant levels.",
+    "status": "pending",
+    "priority": "high",
+    "assignedTo": "James Wilson",
+    "dueDate": "2024-01-15T16:00:00",
+    "type": "maintenance"
+  },
+  {
+    "Id": 3,
+    "title": "VIP Guest Arrival Setup - Suite 501",
+    "description": "Prepare suite for VIP guest arriving at 3 PM. Include welcome amenities and fruit basket.",
+    "status": "pending",
+    "priority": "high",
+    "assignedTo": "Sarah Chen",
+    "dueDate": "2024-01-15T14:30:00",
+    "type": "guest-service"
+  },
+  {
+    "Id": 4,
+    "title": "Restock Minibar - Room 218",
+    "description": "Guest requested minibar restocking. Replace consumed items.",
+    "status": "completed",
+    "priority": "medium",
+    "assignedTo": "Maria Rodriguez",
+    "dueDate": "2024-01-15T11:00:00",
+    "type": "housekeeping"
+  },
+  {
+    "Id": 5,
+    "title": "Inspect Fire Extinguishers - 3rd Floor",
+    "description": "Monthly safety inspection of all fire extinguishers on third floor.",
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": "James Wilson",
+    "dueDate": "2024-01-16T10:00:00",
+    "type": "maintenance"
+  },
+  {
+    "Id": 6,
+    "title": "Arrange Airport Transfer",
+    "description": "Book airport pickup for guest in Room 112 - Flight arrives at 9:30 AM.",
+    "status": "completed",
+    "priority": "medium",
+    "assignedTo": "David Park",
+    "dueDate": "2024-01-15T08:00:00",
+    "type": "guest-service"
+  },
+  {
+    "Id": 7,
+    "title": "Replace Bathroom Tiles - Room 330",
+    "description": "Two cracked tiles in bathroom need replacement before next booking.",
+    "status": "in-progress",
+    "priority": "medium",
+    "assignedTo": "James Wilson",
+    "dueDate": "2024-01-17T16:00:00",
+    "type": "maintenance"
+  },
+  {
+    "Id": 8,
+    "title": "Laundry Service Pickup - Suite 602",
+    "description": "Collect laundry items from VIP suite for express cleaning.",
+    "status": "pending",
+    "priority": "low",
+    "assignedTo": "Maria Rodriguez",
+    "dueDate": "2024-01-15T17:00:00",
+    "type": "housekeeping"
+  },
+  {
+    "Id": 9,
+    "title": "Conference Room Setup",
+    "description": "Set up conference room A for 20-person business meeting tomorrow at 9 AM.",
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": "Sarah Chen",
+    "dueDate": "2024-01-16T08:00:00",
+    "type": "guest-service"
+  },
+  {
+    "Id": 10,
+    "title": "Lobby Window Cleaning",
+    "description": "Clean all lobby windows inside and outside for improved appearance.",
+    "status": "completed",
+    "priority": "low",
+    "assignedTo": "Maria Rodriguez",
+    "dueDate": "2024-01-15T09:00:00",
+    "type": "housekeeping"
+  },
+  {
+    "Id": 11,
+    "title": "Replace Pool Filter",
+    "description": "Scheduled maintenance - replace pool filtration system filter.",
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": "James Wilson",
+    "dueDate": "2024-01-18T10:00:00",
+    "type": "maintenance"
+  },
+  {
+    "Id": 12,
+    "title": "Restaurant Reservation - Party of 8",
+    "description": "Make dinner reservation at hotel restaurant for guests in Rooms 205-206.",
+    "status": "completed",
+    "priority": "low",
+    "assignedTo": "David Park",
+    "dueDate": "2024-01-15T12:00:00",
+    "type": "guest-service"
+  },
+  {
+    "Id": 13,
+    "title": "Carpet Cleaning - Hallway 4th Floor",
+    "description": "Deep clean carpets in 4th floor hallway. Schedule during low-traffic hours.",
+    "status": "pending",
+    "priority": "low",
+    "assignedTo": "Maria Rodriguez",
+    "dueDate": "2024-01-19T06:00:00",
+    "type": "housekeeping"
+  },
+  {
+    "Id": 14,
+    "title": "Fix Leaking Faucet - Room 155",
+    "description": "Guest reported dripping bathroom faucet. Replace washer or cartridge.",
+    "status": "in-progress",
+    "priority": "medium",
+    "assignedTo": "James Wilson",
+    "dueDate": "2024-01-15T15:00:00",
+    "type": "maintenance"
+  },
+  {
+    "Id": 15,
+    "title": "Special Dietary Request Setup",
+    "description": "Arrange gluten-free breakfast items for guest in Room 444 (celiac disease).",
+    "status": "pending",
+    "priority": "high",
+    "assignedTo": "Sarah Chen",
+    "dueDate": "2024-01-16T07:00:00",
+    "type": "guest-service"
+  }
+]
