@@ -14,7 +14,6 @@ import guestsData from "@/services/mockData/guests.json";
 import bookingsData from "@/services/mockData/bookings.json";
 import roomsData from "@/services/mockData/rooms.json";
 import tasksData from "@/services/mockData/tasks.json";
-import profilesData from "@/services/mockData/profiles.json";
 import guestsService from "@/services/api/guestsService";
 
 const Guests = () => {
