@@ -1,11 +1,11 @@
 import React, { useState } from "react"
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom"
 import Sidebar from "@/components/organisms/Sidebar"
 import Header from "@/components/organisms/Header"
 import { cn } from "@/utils/cn"
 
 const Layout = () => {
-const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -35,8 +35,7 @@ const [sidebarOpen, setSidebarOpen] = useState(false);
 
         {/* Main content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-<Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-          <Outlet context={{ sidebarOpen, setSidebarOpen }} />
+          <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
           <main className="flex-1 overflow-auto p-6">
             <Outlet />
           </main>

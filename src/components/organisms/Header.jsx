@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSelector } from "react-redux";
-import { useAuth } from "@/layouts/Root";
+import { AuthContext } from "../../App";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Avatar from "@/components/atoms/Avatar";
 import Badge from "@/components/atoms/Badge";
 
 const Header = ({ onToggleSidebar }) => {
-const { logout } = useAuth();
+  const { logout } = useContext(AuthContext)
   const { user, isAuthenticated } = useSelector((state) => state.user)
 
   const handleLogout = async () => {
